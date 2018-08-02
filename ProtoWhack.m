@@ -12,6 +12,7 @@ if isempty(fieldnames(TaskParameters))
     TaskParameters.GUI.Wires_ABC = '134';
     TaskParameters.GUI.ITI = 1; % (s)
     TaskParameters.GUI.VI = false; % random ITI
+    TaskParameters.GUI.ChoiceDeadLine = 10;
     TaskParameters.GUIMeta.VI.Style = 'checkbox';
     TaskParameters.GUI.Cued = false; % random ITI
     TaskParameters.GUIMeta.Cued.Style = 'checkbox';
@@ -19,7 +20,7 @@ if isempty(fieldnames(TaskParameters))
     TaskParameters.GUI.valueA = 0; % ln(Pa/Pb)=valueA-valueB, Pa: P(reward at a)
     TaskParameters.GUI.valueB = .5;
     TaskParameters.GUI.valueC = 1.5;
-    TaskParameters.GUIPanels.General = {'Ports_ABC','Wires_ABC','ITI','VI','Cued','rewardAmount','valueA','valueB','valueC'};
+    TaskParameters.GUIPanels.General = {'Ports_ABC','Wires_ABC','ITI','VI','ChoiceDeadLine','Cued','rewardAmount','valueA','valueB','valueC'};
     TaskParameters.GUI = orderfields(TaskParameters.GUI);
 end
 BpodParameterGUI('init', TaskParameters);
@@ -32,6 +33,7 @@ BpodSystem.Data.Custom.Rig = getenv('computername');
 
 BpodSystem.Data.Custom.Visits = [];
 BpodSystem.Data.Custom.Latency = [];
+BpodSystem.Data.Custom.Missed = [];
 
 BpodSystem.Data.Custom = orderfields(BpodSystem.Data.Custom);
 
@@ -62,7 +64,7 @@ while RunSession
         return
     end
     
-    updateControlVars()
+    updateControlVars(iTrial)
     iTrial = iTrial + 1;
     BpodSystem.GUIHandles = SessionSummary(BpodSystem.Data, BpodSystem.GUIHandles);
 end

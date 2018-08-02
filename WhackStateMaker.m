@@ -1,4 +1,4 @@
-function [ sma ] = FluxStateMaker( sma )
+function [ sma ] = WhackStateMaker( sma )
 %FLUXSTATEMAKER Defines states listed but yet undefined in SMA
 
 if all(logical(sma.StatesDefined))
@@ -8,7 +8,7 @@ end
 stateName = sma.StateNames{find(~logical(sma.StatesDefined),1)};
 
 try
-    assert(strncmp(stateName,'ITI',3) | strncmp(stateName,'setup',5) | strncmp(stateName,'water',5))
+    assert(strncmp(stateName,'ITI',3) | strncmp(stateName,'setup',5) | strncmp(stateName,'water',5) | strcmp(stateName,'missed_choice'))
 catch
     error('Don''t know how to handle state with this name (TG, Jul31 18)')
 end
@@ -24,6 +24,8 @@ Ports_ABC = num2str(TaskParameters.GUI.Ports_ABC);
 Wires_ABC =  num2str(TaskParameters.GUI.Wires_ABC);
 
 if strncmp(stateName,'setup',5)
+    smaTimer = TaskParameters.GUI.ChoiceDeadLine;
+    smaChange = {'Tup','missed_choice'};
     for iPatch = 1:3
         if strcmp(stateName(5+iPatch),'1')
             PortIn = ['Port' Ports_ABC(iPatch) 'In'];
@@ -50,6 +52,9 @@ elseif strncmp(stateName,'ITI',3)
         smaTimer = exprnd(TaskParameters.GUI.ITI);
     end
     smaChange = {'Tup','exit'};
+elseif strcmp(stateName,'missed_choice')
+    smaTimer = 0;
+    smaChange = {'Tup','ITI'};
 end
 
 %%

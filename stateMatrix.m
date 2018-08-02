@@ -10,6 +10,6 @@ sma = AddState(sma, 'Name', 'state_0',...
     'OutputActions', {});
 
 while any(~logical(sma.StatesDefined))
-    sma = FluxStateMaker(sma);
+    sma = WhackStateMaker(sma);
 end
 end
