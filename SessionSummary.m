@@ -27,7 +27,7 @@ if nargin < 2 % plot initialized (either beginning of session or post-hoc analys
     GUIHandles.Axes.Late.MainHandle = axes('Position', [.42 .2 .25 .7]); hold on
     GUIHandles.Axes.Late.MainHandle.XLabel.String = 'Latency (s)';
     GUIHandles.Axes.Late.MainHandle.YLabel.String = 'Counts';
-    GUIHandles.Axes.Late.MainHandle.XLim = [-.1, 1.1]*60;
+    GUIHandles.Axes.Late.MainHandle.XLim = [-.1, 1.1]*TaskParameters.GUI.ChoiceDeadline;
     
     GUIHandles.Axes.Stale.MainHandle = axes('Position', [.72 .15 .23 .7]); hold on
     GUIHandles.Axes.Stale.MainHandle.Title.String = 'Miss'; 
@@ -53,11 +53,12 @@ if nargin > 0
     try
         cla(GUIHandles.Axes.Late.MainHandle)
         for iPatch = 1:3                  
-            edges=[linspace(0,60,12),+Inf];
+            edges=[linspace(0,TaskParameters.GUI.ChoiceDeadline,12),+Inf];
             GUIHandles.Axes.Late.Hist(iPatch) = histogram(GUIHandles.Axes.Late.MainHandle,Data.Custom.Latency(Data.Custom.Visits==iPatch & ~Data.Custom.Missed),edges);
             GUIHandles.Axes.Late.Hist(iPatch).FaceColor = artist(iPatch,:);
             GUIHandles.Axes.Late.Hist(iPatch).EdgeColor = 'none';
         end
+        GUIHandles.Axes.Late.MainHandle.XLim = [-.1, 1.1]*TaskParameters.GUI.ChoiceDeadline;
         text(GUIHandles.Axes.Late.MainHandle,GUIHandles.Axes.Late.MainHandle.XLim(2)*.97,GUIHandles.Axes.Late.MainHandle.YLim(2)*.91,{'Reward so far:',[sprintf('%2.2f',sum(not(Data.Custom.Missed))*TaskParameters.GUI.rewardAmount/1000) 'mL']},'HorizontalAlignment','right')
     end
     

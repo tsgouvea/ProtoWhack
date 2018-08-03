@@ -24,7 +24,7 @@ Ports_ABC = num2str(TaskParameters.GUI.Ports_ABC);
 Wires_ABC =  num2str(TaskParameters.GUI.Wires_ABC);
 
 if strncmp(stateName,'setup',5)
-    smaTimer = TaskParameters.GUI.ChoiceDeadLine;
+    smaTimer = TaskParameters.GUI.ChoiceDeadline;
     smaChange = {'Tup','missed_choice'};
     for iPatch = 1:3
         if strcmp(stateName(5+iPatch),'1')
@@ -47,9 +47,9 @@ elseif strncmp(stateName,'water',5)
     end
 elseif strncmp(stateName,'ITI',3)
     if TaskParameters.GUI.VI
-        smaTimer = TaskParameters.GUI.ITI;
-    else
         smaTimer = exprnd(TaskParameters.GUI.ITI);
+    else
+        smaTimer = TaskParameters.GUI.ITI;
     end
     smaChange = {'Tup','exit'};
 elseif strcmp(stateName,'missed_choice')
